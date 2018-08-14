@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Test</title>
+</head>
+<body>
+  <div class="articles-list"></div>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
+  // Execute php function
+  $.ajax({
+    url:'http://food.think-in.co/web/country_/list',
+    dataType:'json',
+    type:'get',
+    async:false
+  })
+  .done(function(data){
+    // chk if result has data
+    if ($.trim(data)) {
+      // get data from server
+      var statusMsg = data.statusMsg;
+      var codeMsg = data.codeMsg;
+      var dataRecords = data.dataRecords;
+      // check status from server
+      if (statusMsg == 'success') {
+        // empty countries
+        $('.articles-list').empty();
+        // create variable to store dom elements
+        var data = '';  
+        // loop country data
+        $.each(dataRecords, function(index, item){
+          // capture variables
+          var countryId = item.countryId;
+          var countryName = item.countryName;
+          var flag = item.flag;
+                
+          // create the data with the information
+          data += '<div class="country" id="cn-'+countryId+'">';
+            data += '<div class="country-name">'+countryName+'</div>';
+            data += '<div class="country-flag">'+flag+'</div>';
+          data += '</div>';
+        });
+        // Append the data
+        $('.articles-list').append(data);
+      } else {
+        console.log('Error when getting countries data');
+      }
+    } else {
+      console.log('Error when getting countries data');
+    }
+  }).fail(function() {
+      console.log('Error when getting countries data');
+  });
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
